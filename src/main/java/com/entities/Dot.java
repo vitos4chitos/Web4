@@ -10,12 +10,17 @@ public class Dot {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
-
+    @Column(name = "x")
     private Double x;
+    @Column(name = "y")
     private Double y;
+    @Column(name = "r")
     private Double r;
+    @Column(name = "ingress")
     private Boolean ingress;
+    @Column(name = "login")
     private String login;
 
     public Integer getId() {
