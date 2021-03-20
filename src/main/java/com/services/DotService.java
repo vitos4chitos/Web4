@@ -9,7 +9,7 @@ public class DotService {
 
 
     public boolean validate(Double x, Double y, Double r) {
-        return ((x >= -2 && x<= 2) && (y >= -5.0 && y <= 5.0) && (r > 0 && r <= 2));
+        return (x != null && y != null && r != 0 && (x >= -2 && x<= 2) && (y >= -5.0 && y <= 5.0) && (r > 0 && r <= 2));
     }
 
     public boolean checkArea(double x, double y, double r) {

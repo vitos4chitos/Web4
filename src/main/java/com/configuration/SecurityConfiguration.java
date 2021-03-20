@@ -24,6 +24,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final String point1Test = "/auth";
     private final String point2Test = "/reg";
     private final String point3Test = "/adddot";
+    private final String point4Test = "/checker";
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.cors();
@@ -32,6 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(point1Test).permitAll()
                 .antMatchers(point2Test).permitAll()
                 .antMatchers(point3Test).permitAll()
+                .antMatchers(point4Test).permitAll()
                 .and().httpBasic()
                 .and().sessionManagement().disable();
     }
@@ -39,11 +41,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("*"));
+        configuration.addAllowedOrigin("https://se.ifmo.ru");
         configuration.setAllowedMethods(
                 Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
         configuration.setAllowedHeaders(
-                Arrays.asList("X-Requested-With", "Origin", "Content-Type", "Accept", "Authorization"));
+                Arrays.asList("X-Requested-With", "Origin", "Content-Type", "Accept", "Authorization", "Access-Control-Allow-Origin"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

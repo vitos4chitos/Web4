@@ -37,7 +37,7 @@ public class GreetingController {
 //                System.out.println(user.getLogin());
 //                System.out.println(user.getPassword());
                 if(user.getLogin().equals(auth.getLogin()) && user.getPassword().equals(n.getPassword())){
-                    return "{\"token\": \"" + "true" + "\"}";
+                    return "{\"token\": \"" + Integer.toString(user.getPassword().hashCode()) + "\"}";
                 }
             }
 //            System.out.println(auth.getLogin());
@@ -48,7 +48,13 @@ public class GreetingController {
     public @ResponseBody
     String registration (@RequestBody AuthRequest auth) {
         System.out.println("Пизда");
-        Iterable <User> users = userRepository.findAll();
+        Iterable<User> users;
+        try {
+            users = userRepository.findAll();
+        }
+        catch (Exception e){
+            return "{\"token\": \"" + "connection error" + "\"}";
+        }
         for (User user : users) {
 //            System.out.println(user.getLogin());
 //            System.out.println(user.getPassword());
@@ -65,7 +71,27 @@ public class GreetingController {
         catch (Exception e){
             return "{\"token\": \"" + "connection error" + "\"}";
         }
-        return "{\"token\": \"" + "true" + "\"}";
+        return "{\"token\": \"" + n.getPassword().hashCode() + "\"}";
     }
 
+    @PostMapping(path="/checker")
+    public String checkToken(@RequestBody AuthRequest user){
+        Iterable <User> users;
+        try{
+            users = userRepository.findAll();
+        }
+        catch (Exception e){
+            return "{\"token\": \"" + "connection error" + "\"}";
+        }
+        for (User user1 : users) {
+//                System.out.println(user.getLogin());
+//                System.out.println(user.getPassword());
+            if(user.getLogin().equals(user1.getLogin())){
+                return "{\"token\": \"" + user1.hash() + "\"}";
+            }
+        }
+//            System.out.println(auth.getLogin());
+        return "{\"token\": \"" + "bad" + "\"}";
+    }
 }
+

@@ -1,9 +1,6 @@
 package com.controllers;
 
-import com.entities.Dot;
-import com.entities.DotRepository;
-import com.entities.DotRequest;
-import com.entities.User;
+import com.entities.*;
 import com.services.DotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -26,20 +23,24 @@ public class DotController {
     @PostMapping(path="/adddot")
     public @ResponseBody
     Dot addDot (@RequestBody DotRequest point) {
-        System.out.println(point.getX() + " " + point.getY() + " " + point.getX());
-        if(dotService.validate(point.getX(), point.getY(), point.getR())) {
-            Dot dot = new Dot();
-            dot.setR(point.getR());
-            dot.setX(point.getX());
-            dot.setY(point.getY());
-            dot.setLogin(point.getLogin());
-            dot.setIngress(dotService.checkArea(point.getX(), point.getY(), point.getR()));
-            dotRepository.save(dot);
-            System.out.println(dot.getLogin() + " пипурка");
-            return dot;
+        try {
+            System.out.println(point.getX() + " " + point.getY() + " " + point.getX());
+            if (dotService.validate(point.getX(), point.getY(), point.getR())) {
+                Dot dot = new Dot();
+                dot.setR(point.getR());
+                dot.setX(point.getX());
+                dot.setY(point.getY());
+                dot.setLogin(point.getLogin());
+                dot.setIngress(dotService.checkArea(point.getX(), point.getY(), point.getR()));
+                dotRepository.save(dot);
+                System.out.println(dot.getLogin() + " пипурка");
+                return dot;
+            } else {
+                System.out.println("Пипурка");
+                return null;
+            }
         }
-        else{
-            System.out.println("Пипурка");
+        catch (Exception e){
             return null;
         }
     }
@@ -57,7 +58,12 @@ public class DotController {
     @DeleteMapping("/adddot")
     @Transactional
     public void deleteAll(@RequestParam("login") String login) {
-        dotRepository.deleteDotsByLogin(login);
+        try {
+            dotRepository.deleteDotsByLogin(login);
+        }
+        catch (Exception e){
+            System.out.println("...");
+        }
     }
 
 }
